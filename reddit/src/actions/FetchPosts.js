@@ -6,8 +6,15 @@ export const FETCH_POSTS = "fetch_posts";
 export const FETCH_CATEGORIES = "fetch_categories";
 export const thumbnailDefault = "http://isikonline.com/association/images/default_new_image.jpg";
 
-function fetchPosts(category) {
-  const url = `${ROOT_URL}${category}.json`;
+
+export function prepareURL(category, pagination) {
+  const paginationPath = pagination ? `?count=25&${pagination}` : '';
+  const url = `${ROOT_URL}${category}.json${paginationPath}`;
+  return url;
+}
+
+function fetchPosts(category, pagination) {
+  let url = prepareURL(category, pagination);
   let request = axios.get(url);
 
   return {
@@ -16,8 +23,10 @@ function fetchPosts(category) {
   }
 }
 
-export function fetchCategories() {
-  const url = `${ROOT_URL}subreddits.json`;
+export function fetchCategories(pagination) {
+  const paginationPath = pagination ? `?count=25&${pagination}` : '';
+  const url = `${ROOT_URL}subreddits.json${paginationPath}`;
+console.log(url);
   let request = axios.get(url);
 
   return {

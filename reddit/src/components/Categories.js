@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchCategories, thumbnailDefault } from '../actions/FetchPosts';
+import Pagination from './Pagination';
 
 
 class CategoryList extends Component {
@@ -31,13 +32,22 @@ class CategoryList extends Component {
     })
   }
 
+    onClickPagination(pathComponent) {
+      this.props.fetchCategories(pathComponent);
+  }
+
   render() {
+    const data = this.props.categories.data || {};
     return (
       <div > 
         <h2>Categories: </h2>
         <ul className="list-group">
           {this.renderCategories()}
         </ul>
+        <Pagination after={data.after}
+                    before={data.before}
+                    onClickPagination={this.onClickPagination.bind(this)} >
+        </Pagination>
       </div>
     );
   }

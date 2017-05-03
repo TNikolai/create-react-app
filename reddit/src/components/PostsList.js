@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import fetchPosts, { thumbnailDefault } from '../actions/FetchPosts';
+import fetchPosts, { prepareURL, thumbnailDefault } from '../actions/FetchPosts';
+import Pagination from './Pagination';
 
 class PostsList extends Component {
   componentWillMount() {
@@ -34,7 +35,12 @@ class PostsList extends Component {
     window.open(post.data.url, "_self")
   }
 
+  onClickPagination(pathComponent) {
+      this.props.fetchPosts(this.props.location.pathname, pathComponent);
+  }
+
   render() {
+    const data = this.props.posts.data || {}
     const title = this.props.location.pathname;
     return (
       <div >
@@ -42,6 +48,10 @@ class PostsList extends Component {
         <ul className="list-group">
           {this.renderPosts()}
         </ul>
+        <Pagination after={data.after}
+                    before={data.before}
+                    onClickPagination={this.onClickPagination.bind(this)} >
+        </Pagination>
       </div>
     );
   }
