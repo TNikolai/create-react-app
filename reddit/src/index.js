@@ -8,7 +8,7 @@ import reducers from './reducers';
 import promise from 'redux-promise';
 import App from './components/App';
 import PostsList from './components/PostsList';
-import PostShow from './components/PostShow';
+import CategoryList from './components/Categories';
 
 const createStoreWithMiddleware = applyMiddleware(
   promise
@@ -18,8 +18,8 @@ ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <Router>
         <App>
-          <Route path="/" component={PostsList} />
-          <Route path="posts/:postPath" component={PostShow} />
+          <Route exact path="/" component={CategoryList} />
+          <Route path="/:category" component={PostsList} />
       </App>
     </Router>
   </Provider>

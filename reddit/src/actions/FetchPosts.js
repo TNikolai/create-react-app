@@ -1,12 +1,13 @@
 import axios from 'axios';
 
 const ROOT_URL = "https://www.reddit.com/" 
+
 export const FETCH_POSTS = "fetch_posts";
-export const SHOW_POST = "show_posts";
+export const FETCH_CATEGORIES = "fetch_categories";
 export const thumbnailDefault = "http://isikonline.com/association/images/default_new_image.jpg";
 
-function fetchPosts() {
-  const url = `${ROOT_URL}.json`;
+function fetchPosts(category) {
+  const url = `${ROOT_URL}${category}.json`;
   let request = axios.get(url);
 
   return {
@@ -15,13 +16,12 @@ function fetchPosts() {
   }
 }
 
-
-export function showPost(postPath) {
-  const url = `${ROOT_URL}${postPath}.json`;
+export function fetchCategories() {
+  const url = `${ROOT_URL}subreddits.json`;
   let request = axios.get(url);
 
   return {
-    type: SHOW_POST,
+    type: FETCH_CATEGORIES,
     payload: request
   }
 }
