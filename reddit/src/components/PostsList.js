@@ -10,6 +10,8 @@ class PostsList extends Component {
     this.state = {
       paginationCount: 25
     }
+
+    this.handleClickPagination = this.handleClickPagination.bind(this);
   }
 
   componentWillMount() {
@@ -42,7 +44,7 @@ class PostsList extends Component {
     window.open(post.data.url, "_self")
   }
 
-  onClickPagination(pathComponent) {
+  handleClickPagination(pathComponent) {
     if (!pathComponent) return;
     var count = this.state.paginationCount;
     count = (pathComponent && pathComponent.includes('before')) ? (count - 25) : (count + 25);
@@ -63,7 +65,7 @@ class PostsList extends Component {
         </ul>
         <Pagination after={data.after}
           before={data.before}
-          onClickPagination={this.onClickPagination.bind(this)} >
+          onClickPagination={this.handleClickPagination} >
         </Pagination>
       </div>
     );

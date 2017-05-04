@@ -12,10 +12,11 @@ class CategoryList extends Component {
     this.state = {
       paginationCount: 25
     }
+    this.handleClickPagination = this.handleClickPagination.bind(this);
   }
 
   componentWillMount() {
-      this.props.fetchCategories();
+    this.props.fetchCategories();
   }
 
   renderCategories() {
@@ -27,41 +28,44 @@ class CategoryList extends Component {
     const categories = this.props.categories.data.children
 
     return categories.map((category) => {
-      const thumbnail = thumbnailDefault;              
+      const thumbnail = thumbnailDefault;
       return (
         <li className="list-group-item" key={category.data.id}>
           <img src={thumbnail} width="70" height="52" alt="" />
           <Link to={category.data.url}>
-             <strong  > {category.data.title} </strong>
+            <strong  > {category.data.title} </strong>
           </Link>
         </li>
       );
     })
   }
 
-    onClickPagination(pathComponent) {
-      if (!pathComponent) return;
-      var count = this.state.paginationCount;
-      count = (pathComponent && pathComponent.includes('before')) ? (count - 25) : (count + 25);
-      this.props.fetchCategories(pathComponent, count);
-      this.setState((prevState, props) => {
-        return { paginationCount: count }
-      });
+  handleClickPagination(pathComponent) {
+    if (!pathComponent) return;
+    var count = this.state.paginationCount;
+    count = (pathComponent && pathComponent.includes('before')) ? (count - 25) : (count + 25);
+    this.props.fetchCategories(pathComponent, count);
+    this.setState((prevState, props) => {
+      return { paginationCount: count }
+    });
   }
 
   render() {
-    const data = this.props.categories.data || {};
+    const {data = {}} = this.props.categories;
+
     return (
-      <div > 
+      <div >
         <h2>Categories: </h2>
         <ul className="list-group">
           {this.renderCategories()}
         </ul>
-        <Pagination after={data.after}
-                    before={data.before}
-                    onClickPagination={this.onClickPagination.bind(this)} >
+        <Pagination
+          after={data.after}
+          before={data.before}
+          onClickPagination={this.handleClickPagination}
+        >
         </Pagination>
-      </div>
+      </div >
     );
   }
 
