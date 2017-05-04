@@ -1,5 +1,6 @@
 
-import React, {Component} from 'react';
+import React from 'react';
+import styles from '../styles/index.css';
 
 const Pagination = (props) => {
 
@@ -7,7 +8,7 @@ const Pagination = (props) => {
         var next = props.after ? <button onClick={event => props.onClickPagination('after=' + props.after)} > next </button> : null;
 
         return (
-        <div className="pagination" >
+        <div className={styles.pagination} >
             {prev}
             {next}            
         </div>

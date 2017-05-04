@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import fetchPosts, { prepareURL, thumbnailDefault } from '../actions/FetchPosts';
+import fetchPosts, { thumbnailDefault } from '../actions/FetchPosts';
 import Pagination from './Pagination';
 
 class PostsList extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      paginationCount: 25
+    }
+  }
+
   componentWillMount() {
     this.props.fetchPosts(this.props.location.pathname);
   }
@@ -36,7 +43,13 @@ class PostsList extends Component {
   }
 
   onClickPagination(pathComponent) {
-      this.props.fetchPosts(this.props.location.pathname, pathComponent);
+    if (!pathComponent) return;
+    var count = this.state.paginationCount;
+    count = (pathComponent && pathComponent.includes('before')) ? (count - 25) : (count + 25);
+    this.props.fetchPosts(this.props.location.pathname, pathComponent, count);
+    this.setState((prevState, props) => {
+      return { paginationCount: count }
+    });
   }
 
   render() {
@@ -49,15 +62,15 @@ class PostsList extends Component {
           {this.renderPosts()}
         </ul>
         <Pagination after={data.after}
-                    before={data.before}
-                    onClickPagination={this.onClickPagination.bind(this)} >
+          before={data.before}
+          onClickPagination={this.onClickPagination.bind(this)} >
         </Pagination>
       </div>
     );
   }
 
   isUrl(s) {
-    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+    var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
     return regexp.test(s);
   }
 

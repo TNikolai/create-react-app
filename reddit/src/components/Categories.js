@@ -6,6 +6,14 @@ import Pagination from './Pagination';
 
 
 class CategoryList extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      paginationCount: 25
+    }
+  }
+
   componentWillMount() {
       this.props.fetchCategories();
   }
@@ -16,11 +24,10 @@ class CategoryList extends Component {
         <h5>____Loading...</h5>
       );
     }
-
-
     const categories = this.props.categories.data.children
+
     return categories.map((category) => {
-      const thumbnail = this.isUrl(category.data.thumbnail) ? category.data.thumbnail : thumbnailDefault;              
+      const thumbnail = thumbnailDefault;              
       return (
         <li className="list-group-item" key={category.data.id}>
           <img src={thumbnail} width="70" height="52" alt="" />
@@ -33,7 +40,13 @@ class CategoryList extends Component {
   }
 
     onClickPagination(pathComponent) {
-      this.props.fetchCategories(pathComponent);
+      if (!pathComponent) return;
+      var count = this.state.paginationCount;
+      count = (pathComponent && pathComponent.includes('before')) ? (count - 25) : (count + 25);
+      this.props.fetchCategories(pathComponent, count);
+      this.setState((prevState, props) => {
+        return { paginationCount: count }
+      });
   }
 
   render() {
@@ -51,11 +64,6 @@ class CategoryList extends Component {
       </div>
     );
   }
-
-isUrl(s) {
-   var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-   return regexp.test(s);
-}
 
 }
 
